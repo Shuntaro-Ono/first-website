@@ -1,43 +1,93 @@
 <!DOCTYPE html>
-</html>
-    <body>
-        <h1>Shuntaro Ono</h1>
-        <p><em>I am passionate about creating website!</em></p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shuntaro Ono</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+    <h1>Shuntaro Ono</h1>
+    <p><em>I am passionate about creating website!</em></p>
 
-        <main>
-            <section>
-                <h2>About Me</h2>
-                <p>
-                    Hi I'm learning <strong>web development</strong>
-                    and loving every minute of it.
-                </p>
-                <p>This is a new change!</p>
-            </section>
-
-            <section>
-                <h2>My hobbies</h2>
-                <ul>
-                    <li>Tennis</li>
-                    <li>Kyogen</li>
-                    <li>Kabuki</li>
-                </ul>
-            </section>
-            
-            <section>
-                <h2>Favorite films</h2>
-                <ol>
-                    <li>Inception</li>
-                    <li>Dark Knight</li>
-                    <li>Star Wars</li>
-                </ol>
-            </section>
-        </main>
-
-        <footer>
+    <main>
+        <section>
+            <h2>About Me</h2>
             <p>
-                Find me on 
-                <a href="https://www.apple.com/jp/" target="_blank">Apple</a>
+                Hi I'm learning <strong>web development</strong>
+                and loving every minute of it.
             </p>
-        </footer>
-    </body>
+            <p>This is a new change!</p>
+        </section>
+
+        <section>
+            <h2>My hobbies</h2>
+            <ul>
+                <li>Tennis</li>
+                <li>Kyogen</li>
+                <li>Kabuki</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Favorite films</h2>
+            <ol>
+                <li>Inception</li>
+                <li>Dark Knight</li>
+                <li>Star Wars</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Chart</h2>
+            <svg width="500" height="300"></svg>
+            <script>
+                const data = [
+                    { name: "A", value: 1 },
+                    { name: "B", value: 5 },
+                    { name: "C", value: 8 },
+                    { name: "D", value: 10 }
+                ];
+
+                const width = 500;
+                const height = 300;
+                const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+                const svg = d3.select("svg");
+
+                const x = d3.scaleBand()
+                    .domain(data.map(d => d.name))
+                    .range([margin.left, width - margin.right])
+                    .padding(0.2);
+
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.value)])
+                    .nice()
+                    .range([height - margin.bottom, margin.top]);
+
+                svg.selectAll("rect")
+                    .data(data)
+                    .join("rect")
+                    .attr("x", d => x(d.name))
+                    .attr("y", d => y(d.value))
+                    .attr("width", x.bandwidth())
+                    .attr("height", d => y(0) - y(d.value));
+
+                svg.append("g")
+                    .attr("transform", `translate(0,${height - margin.bottom})`)
+                    .call(d3.axisBottom(x));
+
+                svg.append("g")
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y));
+            </script>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Find me on
+            <a href="https://www.apple.com/jp/" target="_blank">Apple</a>
+        </p>
+    </footer>
+</body>
 </html>
