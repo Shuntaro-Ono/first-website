@@ -111,9 +111,19 @@
       nameInput.focus();
     }
 
+    function findLetter(name, box) {
+      // 名前は完全一致（前後の空白は無視）、レターボックス番号もその人に
+      // 割り当てられた番号と一致している必要があります。
+      const key = Object.keys(LETTERS).find((k) => k.trim() === name.trim());
+      if (!key) return null;
+      const letter = LETTERS[key];
+      if (String(letter.box).trim() !== String(box).trim()) return null;
+      return letter;
+    }
+
     function tryOpenBox() {
       const num = boxInput.value.trim();
-      const letter = LETTERS[num];
+      const letter = findLetter(visitorName, num);
       if (!letter) {
         boxError.classList.remove("hidden");
         return;
