@@ -631,6 +631,28 @@ footer p::after {
   padding-bottom: 10px;
   border-bottom: 1px solid var(--rule);
 }
+
+/* 写真がないアイテム（絵文字プレースホルダーのまま）を開いたときの表示 */
+.shelf-desc-icon {
+  text-align: center;
+  font-size: 34px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.shelf-view-desc.no-photo h3 {
+  text-align: center;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.shelf-view-desc.no-photo h3::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--rule);
+  margin: 10px auto 16px;
+}
 .shelf-desc-body {
   font-family: var(--serif-jp);
   font-size: 14px;

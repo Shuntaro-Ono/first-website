@@ -59,7 +59,12 @@
     `).join("");
 
     shelf.querySelectorAll(".shelf-item").forEach((el) => {
-      const open = () => openShelfItem(SHELF_ITEMS[Number(el.dataset.index)]);
+      const open = () => {
+        // 画像の読み込みに失敗している（＝絵文字プレースホルダーのまま）場合は
+        // 写真ビューを飛ばして説明を直接表示する。
+        const hasPhoto = !!el.querySelector(".frame-inner img");
+        openShelfItem(SHELF_ITEMS[Number(el.dataset.index)], hasPhoto);
+      };
       el.addEventListener("click", open);
       el.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
@@ -69,7 +74,7 @@
 
   /* ---------- 棚アイテム モーダル（写真 ⇄ 説明） ---------- */
 
-  function openShelfItem(item) {
+  function openShelfItem(item, hasPhoto) {
     const modal = document.getElementById("shelfModal");
     const img = document.getElementById("shelfPhotoImg");
     img.src = item.image;
@@ -83,7 +88,23 @@
     (item.body || []).forEach((p) => parts.push(`<p>${escapeHtml(p)}</p>`));
     bodyEl.innerHTML = parts.join("") || "<p>（説明はまだありません）</p>";
 
-    showShelfPhotoView();
+    const descView = document.getElementById("shelfViewDesc");
+    const backBtn = document.getElementById("shelfShowPhoto");
+    const iconEl = document.getElementById("shelfDescIcon");
+
+    if (hasPhoto) {
+      descView.classList.remove("no-photo");
+      backBtn.classList.remove("hidden");
+      iconEl.classList.add("hidden");
+      showShelfPhotoView();
+    } else {
+      // 写真がないアイテムは説明だけを、絵文字アイコン付きで表示する。
+      descView.classList.add("no-photo");
+      backBtn.classList.add("hidden");
+      iconEl.textContent = item.emoji || "";
+      iconEl.classList.toggle("hidden", !item.emoji);
+      showShelfDescView();
+    }
     modal.classList.remove("hidden");
   }
 
