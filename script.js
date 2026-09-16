@@ -77,6 +77,55 @@
     });
   }
 
+  /* ---------- タイプライター演出 ---------- */
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // 1文字ずつ表示し、末尾に点滅カーソルを出す。tick.token !== 現在のtokenに
+  // なったら（=別のタイプが割り込んだら）即座に中断する。
+  function typeText(el, text, token, speed = 32) {
+    return new Promise((resolve) => {
+      let i = 0;
+      const step = () => {
+        if (token.cancelled) return resolve();
+        el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="caret"></span>';
+        if (i >= text.length) return resolve();
+        i++;
+        setTimeout(step, speed);
+      };
+      step();
+    });
+  }
+
+  let typeToken = { cancelled: false };
+
+  async function typeStep(stepEl) {
+    typeToken.cancelled = true; // 前のタイプを中断
+    const token = { cancelled: false };
+    typeToken = token;
+
+    const paragraphs = stepEl.querySelectorAll("p[data-text]");
+    for (const p of paragraphs) {
+      if (token.cancelled) return;
+      await typeText(p, p.dataset.text, token);
+      if (token.cancelled) return;
+      p.innerHTML = escapeHtml(p.dataset.text); // 確定：次の行に移る前にカーソルを消す
+    }
+    if (!token.cancelled) {
+      // 最後の行にだけ、入力待ちの点滅カーソルを残す
+      const last = paragraphs[paragraphs.length - 1];
+      if (last) last.innerHTML = escapeHtml(last.dataset.text) + '<span class="caret"></span>';
+    }
+  }
+
+  function prepareTypewriter(stepEl) {
+    stepEl.querySelectorAll("p").forEach((p) => {
+      if (!p.dataset.text) p.dataset.text = p.textContent.trim();
+    });
+  }
+
   /* ---------- ターミナル（名前 → ボックス番号） ---------- */
 
   let visitorName = "";
@@ -91,6 +140,10 @@
     const backToName = document.getElementById("backToName");
     const boxError = document.getElementById("boxError");
 
+    prepareTypewriter(stepName);
+    prepareTypewriter(stepBox);
+    typeStep(stepName);
+
     function goToBoxStep() {
       const name = nameInput.value.trim();
       if (!name) {
@@ -102,12 +155,14 @@
       stepBox.classList.remove("hidden");
       boxInput.value = "";
       boxError.classList.add("hidden");
+      typeStep(stepBox);
       boxInput.focus();
     }
 
     function goToNameStep() {
       stepBox.classList.add("hidden");
       stepName.classList.remove("hidden");
+      typeStep(stepName);
       nameInput.focus();
     }
 
