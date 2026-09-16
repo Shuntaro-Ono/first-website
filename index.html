@@ -1,93 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>Shuntaro Ono</title>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shuntaro's Post Office</title>
+<meta name="description" content="デジタル郵便局。あなた宛の手紙を、レターボックス番号で受け取れます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Zen+Old+Mincho:wght@600&family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Shuntaro Ono</h1>
-    <p><em>I am passionate about creating website!</em></p>
 
-    <main>
-        <section>
-            <h2>About Me</h2>
-            <p>
-                Hi I'm learning <strong>web development</strong>
-                and loving every minute of it.
-            </p>
-            <p>This is a new change!</p>
-        </section>
+  <header class="hero">
+    <div class="hero-text">
+      <h1>Shuntaro's Post Office</h1>
+      <p class="subtitle">CHIANG MAI, THAILAND</p>
+    </div>
+    <div class="clocks">
+      <div class="clock">
+        <div class="clock-face" id="clockTokyo">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="clock-center"></div>
+        </div>
+        <div class="clock-label">TOKYO<span>JST</span></div>
+      </div>
+      <div class="clock">
+        <div class="clock-face" id="clockChiangMai">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="clock-center"></div>
+        </div>
+        <div class="clock-label">CHIANG MAI<span>ICT</span></div>
+      </div>
+    </div>
+  </header>
 
-        <section>
-            <h2>My hobbies</h2>
-            <ul>
-                <li>Tennis</li>
-                <li>Kyogen</li>
-                <li>Kabuki</li>
-            </ul>
-        </section>
+  <main>
+    <section class="shelf-section">
+      <h2 class="section-title">SHELF</h2>
+      <div class="shelf" id="shelf"></div>
+    </section>
 
-        <section>
-            <h2>Favorite films</h2>
-            <ol>
-                <li>Inception</li>
-                <li>Dark Knight</li>
-                <li>Star Wars</li>
-            </ol>
-        </section>
+    <section class="postboxes-section">
+      <h2 class="section-title light">POST BOXES</h2>
+      <div class="postboxes" id="postboxes"></div>
 
-        <section>
-            <h2>Chart</h2>
-            <svg width="500" height="300"></svg>
-            <script>
-                const data = [
-                    { name: "A", value: 1 },
-                    { name: "B", value: 5 },
-                    { name: "C", value: 8 },
-                    { name: "D", value: 10 }
-                ];
+      <div class="terminal">
+        <div class="terminal-box">
 
-                const width = 500;
-                const height = 300;
-                const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+          <div class="step" id="stepName">
+            <p>デジタル郵便局にようこそ。</p>
+            <p>まずはお名前を教えてください。</p>
+            <div class="input-row">
+              <input type="text" id="nameInput" placeholder="なまえをにゅうりょく" autocomplete="off">
+              <button id="nameSubmit" aria-label="次へ">▶</button>
+            </div>
+          </div>
 
-                const svg = d3.select("svg");
+          <div class="step hidden" id="stepBox">
+            <p>あなた宛のお手紙が届いています。</p>
+            <p>レターボックス番号をご入力ください。</p>
+            <div class="input-row">
+              <input type="text" id="boxInput" placeholder="000" maxlength="3" inputmode="numeric" autocomplete="off">
+              <button id="boxSubmit">開ける</button>
+            </div>
+            <p class="error hidden" id="boxError">お名前またはレターボックス番号が見つかりませんでした。</p>
+            <button class="link-back" id="backToName">← なまえをかえる</button>
+          </div>
 
-                const x = d3.scaleBand()
-                    .domain(data.map(d => d.name))
-                    .range([margin.left, width - margin.right])
-                    .padding(0.2);
+        </div>
+      </div>
+    </section>
+  </main>
 
-                const y = d3.scaleLinear()
-                    .domain([0, d3.max(data, d => d.value)])
-                    .nice()
-                    .range([height - margin.bottom, margin.top]);
+  <footer>
+    <p>LIVING IN CHIANG MAI · MADE WITH LOVE</p>
+  </footer>
 
-                svg.selectAll("rect")
-                    .data(data)
-                    .join("rect")
-                    .attr("x", d => x(d.name))
-                    .attr("y", d => y(d.value))
-                    .attr("width", x.bandwidth())
-                    .attr("height", d => y(0) - y(d.value));
+  <!-- 手紙モーダル -->
+  <div class="modal-overlay hidden" id="letterModal">
+    <div class="letter-card">
+      <button class="icon-btn speak-btn" id="speakBtn" aria-label="読み上げ">🔊</button>
+      <div class="postal-stamp">✉<span>POSTAL</span></div>
+      <div class="letter-date" id="letterDate"></div>
+      <div class="letter-body" id="letterBody"></div>
+      <div class="letter-signature" id="letterSignature"></div>
+      <div class="letter-actions">
+        <button class="reply-btn" id="replyBtn">✉ 返信を書く</button>
+      </div>
+      <button class="close-link" id="closeLetterModal">閉じる</button>
+    </div>
+  </div>
 
-                svg.append("g")
-                    .attr("transform", `translate(0,${height - margin.bottom})`)
-                    .call(d3.axisBottom(x));
+  <!-- 返信モーダル -->
+  <div class="modal-overlay hidden" id="replyModal">
+    <div class="reply-card">
+      <h3>返信を書く</h3>
+      <form id="replyForm">
+        <input type="text" name="お名前" id="replyName" placeholder="お名前" required>
+        <textarea name="メッセージ" id="replyMessage" rows="6" placeholder="返信メッセージを入力してください" required></textarea>
+        <input type="hidden" name="_subject" value="Shuntaro's Post Officeへの返信">
+        <button type="submit" id="replySubmit">送信する</button>
+      </form>
+      <p class="reply-status" id="replyStatus"></p>
+      <button class="close-link" id="closeReplyModal">閉じる</button>
+    </div>
+  </div>
 
-                svg.append("g")
-                    .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y));
-            </script>
-        </section>
-    </main>
-
-    <footer>
-        <p>
-            Find me on
-            <a href="https://www.apple.com/jp/" target="_blank">Apple</a>
-        </p>
-    </footer>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
