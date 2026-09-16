@@ -85,7 +85,7 @@
 
   // 1文字ずつ表示し、末尾に点滅カーソルを出す。token.cancelledが立ったら
   // （=別のタイプが割り込んだら）即座に中断する。
-  function typeText(el, text, token, speed = 32) {
+  function typeText(el, text, token, speed = 48) {
     return new Promise((resolve) => {
       let i = 0;
       const step = () => {
@@ -100,7 +100,7 @@
   }
 
   // typeTextの逆再生（末尾から1文字ずつバックスペースで消していく）
-  function eraseText(el, text, token, speed = 14) {
+  function eraseText(el, text, token, speed = 20) {
     return new Promise((resolve) => {
       let i = text.length;
       const step = () => {
