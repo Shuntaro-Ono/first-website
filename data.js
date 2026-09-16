@@ -104,4 +104,4 @@ const LETTERS = {
    https://formspree.io で無料アカウントを作り、フォームのエンドポイントURLを
    ここに貼り付けてください（例: "https://formspree.io/f/abcdwxyz"）。
    ------------------------------------------------------------------------ */
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_ME";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mpqvjzgk";
