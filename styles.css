@@ -254,7 +254,13 @@ main {
   flex-direction: column;
   align-items: center;
   gap: clamp(3px, 0.8vmin, 8px);
+  cursor: pointer;
 }
+.shelf-item:hover .frame,
+.shelf-item:focus-visible .frame {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35), 0 0 0 2px var(--gold);
+}
+.shelf-item:focus-visible { outline: none; }
 
 .shelf-item .frame {
   flex: 1 1 auto;
@@ -562,6 +568,90 @@ footer p::after {
   border: none;
   color: var(--muted);
   font-size: 12.5px;
+}
+
+/* ---------- 棚アイテム モーダル ---------- */
+
+.shelf-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: var(--cream-card);
+  border-radius: 6px;
+  padding: 18px 18px 8px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.shelf-photo-wrap {
+  width: 100%;
+  max-height: 55vh;
+  background: #dcd3bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.shelf-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  max-height: 55vh;
+  object-fit: contain;
+}
+
+.shelf-photo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 4px 6px;
+}
+.shelf-photo-caption {
+  font-family: var(--caption-font);
+  font-weight: 600;
+  font-size: 15px;
+}
+.shelf-desc-link {
+  background: none;
+  border: none;
+  color: var(--orange);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.shelf-view-desc {
+  padding: 18px 12px 8px;
+}
+.shelf-view-desc h3 {
+  font-family: var(--caption-font);
+  font-size: 19px;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.shelf-desc-body {
+  font-family: var(--serif-jp);
+  font-size: 14px;
+  line-height: 1.9;
+  color: #2a251d;
+  white-space: pre-line;
+}
+.shelf-desc-body p { margin: 0 0 18px; }
+.shelf-desc-body .work-title {
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.shelf-back-link {
+  display: block;
+  margin-top: 6px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 0;
 }
 
 .reply-card {

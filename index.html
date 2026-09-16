@@ -94,6 +94,27 @@
     </div>
   </div>
 
+  <!-- 棚アイテム モーダル（写真 ⇄ 説明） -->
+  <div class="modal-overlay hidden" id="shelfModal">
+    <div class="shelf-card">
+      <div class="shelf-view" id="shelfViewPhoto">
+        <div class="shelf-photo-wrap">
+          <img id="shelfPhotoImg" src="" alt="">
+        </div>
+        <div class="shelf-photo-footer">
+          <span class="shelf-photo-caption" id="shelfPhotoCaption"></span>
+          <button class="shelf-desc-link" id="shelfShowDesc">説明を見る →</button>
+        </div>
+      </div>
+      <div class="shelf-view shelf-view-desc hidden" id="shelfViewDesc">
+        <h3 id="shelfDescTitle"></h3>
+        <div class="shelf-desc-body" id="shelfDescBody"></div>
+        <button class="shelf-back-link" id="shelfShowPhoto">← 写真に戻る</button>
+      </div>
+      <button class="close-link" id="closeShelfModal">閉じる</button>
+    </div>
+  </div>
+
   <!-- 返信モーダル -->
   <div class="modal-overlay hidden" id="replyModal">
     <div class="reply-card">

@@ -46,8 +46,8 @@
 
   function renderShelf() {
     const shelf = document.getElementById("shelf");
-    shelf.innerHTML = SHELF_ITEMS.map((item) => `
-      <div class="shelf-item">
+    shelf.innerHTML = SHELF_ITEMS.map((item, i) => `
+      <div class="shelf-item" data-index="${i}" role="button" tabindex="0">
         <div class="frame">
           <div class="frame-inner" data-fallback="${item.emoji || "🖼️"}">
             <img src="${item.image}" alt="${item.label}"
@@ -57,6 +57,55 @@
         <div class="caption">${item.label}</div>
       </div>
     `).join("");
+
+    shelf.querySelectorAll(".shelf-item").forEach((el) => {
+      const open = () => openShelfItem(SHELF_ITEMS[Number(el.dataset.index)]);
+      el.addEventListener("click", open);
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+      });
+    });
+  }
+
+  /* ---------- 棚アイテム モーダル（写真 ⇄ 説明） ---------- */
+
+  function openShelfItem(item) {
+    const modal = document.getElementById("shelfModal");
+    const img = document.getElementById("shelfPhotoImg");
+    img.src = item.image;
+    img.alt = item.label;
+    document.getElementById("shelfPhotoCaption").textContent = item.label;
+    document.getElementById("shelfDescTitle").textContent = item.label;
+
+    const bodyEl = document.getElementById("shelfDescBody");
+    const parts = [];
+    if (item.workTitle) parts.push(`<p class="work-title">${escapeHtml(item.workTitle)}</p>`);
+    (item.body || []).forEach((p) => parts.push(`<p>${escapeHtml(p)}</p>`));
+    bodyEl.innerHTML = parts.join("") || "<p>（説明はまだありません）</p>";
+
+    showShelfPhotoView();
+    modal.classList.remove("hidden");
+  }
+
+  function showShelfPhotoView() {
+    document.getElementById("shelfViewPhoto").classList.remove("hidden");
+    document.getElementById("shelfViewDesc").classList.add("hidden");
+  }
+  function showShelfDescView() {
+    document.getElementById("shelfViewPhoto").classList.add("hidden");
+    document.getElementById("shelfViewDesc").classList.remove("hidden");
+  }
+
+  function initShelfModal() {
+    const modal = document.getElementById("shelfModal");
+    document.getElementById("shelfShowDesc").addEventListener("click", showShelfDescView);
+    document.getElementById("shelfShowPhoto").addEventListener("click", showShelfPhotoView);
+    document.getElementById("closeShelfModal").addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+    modal.addEventListener("click", (e) => {
+      if (e.target.id === "shelfModal") modal.classList.add("hidden");
+    });
   }
 
   /* ---------- 郵便ボックス ---------- */
@@ -327,6 +376,7 @@
     startClocks();
     renderShelf();
     renderPostboxes();
+    initShelfModal();
     initTerminal();
     initLetterModal();
     initReplyModal();
