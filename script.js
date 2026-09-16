@@ -83,8 +83,8 @@
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // 1文字ずつ表示し、末尾に点滅カーソルを出す。tick.token !== 現在のtokenに
-  // なったら（=別のタイプが割り込んだら）即座に中断する。
+  // 1文字ずつ表示し、末尾に点滅カーソルを出す。token.cancelledが立ったら
+  // （=別のタイプが割り込んだら）即座に中断する。
   function typeText(el, text, token, speed = 32) {
     return new Promise((resolve) => {
       let i = 0;
@@ -99,25 +99,61 @@
     });
   }
 
+  // typeTextの逆再生（末尾から1文字ずつバックスペースで消していく）
+  function eraseText(el, text, token, speed = 14) {
+    return new Promise((resolve) => {
+      let i = text.length;
+      const step = () => {
+        if (token.cancelled) return resolve();
+        el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="caret"></span>';
+        if (i <= 0) return resolve();
+        i--;
+        setTimeout(step, speed);
+      };
+      step();
+    });
+  }
+
+  function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   let typeToken = { cancelled: false };
 
-  async function typeStep(stepEl) {
-    typeToken.cancelled = true; // 前のタイプを中断
-    const token = { cancelled: false };
-    typeToken = token;
+  // 打ち込み → 5秒待機 → 消す → また打ち込み…を、そのステップが
+  // 表示されている間ずっとループする。
+  async function runTypewriterLoop(stepEl, token) {
+    const paragraphs = Array.from(stepEl.querySelectorAll("p[data-text]"));
 
-    const paragraphs = stepEl.querySelectorAll("p[data-text]");
     for (const p of paragraphs) {
       if (token.cancelled) return;
       await typeText(p, p.dataset.text, token);
       if (token.cancelled) return;
       p.innerHTML = escapeHtml(p.dataset.text); // 確定：次の行に移る前にカーソルを消す
     }
-    if (!token.cancelled) {
-      // 最後の行にだけ、入力待ちの点滅カーソルを残す
-      const last = paragraphs[paragraphs.length - 1];
-      if (last) last.innerHTML = escapeHtml(last.dataset.text) + '<span class="caret"></span>';
+    if (token.cancelled) return;
+    const last = paragraphs[paragraphs.length - 1];
+    if (last) last.innerHTML = escapeHtml(last.dataset.text) + '<span class="caret"></span>';
+
+    await wait(5000);
+    if (token.cancelled) return;
+
+    for (const p of [...paragraphs].reverse()) {
+      if (token.cancelled) return;
+      await eraseText(p, p.dataset.text, token);
+      if (token.cancelled) return;
+      p.innerHTML = "";
     }
+    if (token.cancelled) return;
+
+    runTypewriterLoop(stepEl, token); // ループ継続
+  }
+
+  function typeStep(stepEl) {
+    typeToken.cancelled = true; // 前のループを中断
+    const token = { cancelled: false };
+    typeToken = token;
+    runTypewriterLoop(stepEl, token);
   }
 
   function prepareTypewriter(stepEl) {
