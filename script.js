@@ -180,6 +180,14 @@
     prepareTypewriter(stepBox);
     typeStep(stepName);
 
+    // 端末の自動入力・予測変換が focus() の直後に値を差し込んでくることがある
+    // ため、同期クリアだけでなく次の描画後・少し後にも念押しで空にする。
+    function forceClearBoxInput() {
+      boxInput.value = "";
+      requestAnimationFrame(() => { boxInput.value = ""; });
+      setTimeout(() => { boxInput.value = ""; }, 50);
+    }
+
     function goToBoxStep() {
       const name = nameInput.value.trim();
       if (!name) {
@@ -189,7 +197,7 @@
       visitorName = name;
       stepName.classList.add("hidden");
       stepBox.classList.remove("hidden");
-      boxInput.value = "";
+      forceClearBoxInput();
       boxError.classList.add("hidden");
       typeStep(stepBox);
       boxInput.focus();
