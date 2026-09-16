@@ -24,6 +24,8 @@
   --serif-en: "Playfair Display", "Zen Old Mincho", serif;
   --serif-jp: "Noto Serif JP", serif;
   --sans-jp: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* 欧文はCourier Prime、和文はDotGothic16（等幅・タイプライター/端末風）で統一 */
+  --mono: "Courier Prime", "DotGothic16", "Courier New", monospace;
 }
 
 * { box-sizing: border-box; }
@@ -318,6 +320,7 @@ main {
   border: 2px solid var(--ink);
   border-radius: 6px;
   padding: 22px 24px;
+  font-family: var(--mono);
 }
 
 .terminal-box p {
@@ -338,11 +341,11 @@ main {
   border: none;
   border-radius: 4px;
   padding: 12px 14px;
-  font-family: var(--sans-jp);
+  font-family: inherit;
   font-size: 14px;
   letter-spacing: 0.02em;
 }
-.input-row input::placeholder { color: #8a8272; }
+.input-row input::placeholder { color: #8a8272; font-family: inherit; }
 
 .input-row button {
   background: #241f18;
@@ -351,6 +354,7 @@ main {
   border-radius: 4px;
   padding: 0 20px;
   font-size: 14px;
+  font-family: inherit;
 }
 #boxSubmit { background: var(--cream-card); color: var(--ink); border: 1px solid var(--ink); }
 
@@ -361,12 +365,14 @@ main {
   font-size: 13px;
   margin-top: 14px;
   padding: 0;
+  font-family: inherit;
 }
 
 .error {
   color: #a3392a;
   font-size: 13px;
   margin-top: 10px;
+  font-family: inherit;
 }
 
 /* ---------- Footer ---------- */
@@ -416,17 +422,6 @@ footer p::after {
   padding: 36px 30px 28px;
   border-radius: 4px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-}
-
-.speak-btn {
-  position: absolute;
-  top: 20px; left: 20px;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: var(--orange);
-  border: none;
-  color: #fff;
-  font-size: 15px;
 }
 
 .postal-stamp {

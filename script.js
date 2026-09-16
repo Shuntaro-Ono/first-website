@@ -158,22 +158,12 @@
 
   function closeLetter() {
     document.getElementById("letterModal").classList.add("hidden");
-    window.speechSynthesis && window.speechSynthesis.cancel();
   }
 
   function initLetterModal() {
     document.getElementById("closeLetterModal").addEventListener("click", closeLetter);
     document.getElementById("letterModal").addEventListener("click", (e) => {
       if (e.target.id === "letterModal") closeLetter();
-    });
-
-    document.getElementById("speakBtn").addEventListener("click", () => {
-      if (!("speechSynthesis" in window)) return;
-      const text = document.getElementById("letterBody").innerText;
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "ja-JP";
-      window.speechSynthesis.speak(utter);
     });
 
     document.getElementById("replyBtn").addEventListener("click", () => {
