@@ -211,7 +211,7 @@ main {
 /* ---------- Shelf ---------- */
 
 .shelf-section {
-  flex: 2 1 0;
+  flex: 4 1 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -280,7 +280,7 @@ main {
 .shelf-item .frame img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .shelf-item .caption {
@@ -297,11 +297,11 @@ main {
 /* ---------- Post boxes ---------- */
 
 .postboxes-section {
-  flex: 3 1 0;
+  flex: 2 1 0;
   min-height: 0;
   background: var(--box-panel);
   border-radius: 6px;
-  padding: clamp(10px, 2vmin, 24px) clamp(10px, 2vmin, 24px) clamp(8px, 1.6vmin, 20px);
+  padding: clamp(6px, 1.4vmin, 16px) clamp(8px, 1.6vmin, 18px) clamp(6px, 1.2vmin, 14px);
   display: flex;
   flex-direction: column;
 }
@@ -312,14 +312,14 @@ main {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(4px, 1vmin, 10px);
+  gap: clamp(3px, 0.8vmin, 8px);
 }
 
 .postbox {
   background: var(--box-slot);
   border: 1px solid var(--box-slot-border);
   border-radius: 4px;
-  padding: clamp(4px, 1vmin, 12px) 4px clamp(3px, 0.6vmin, 8px);
+  padding: clamp(2px, 0.7vmin, 8px) 3px clamp(2px, 0.4vmin, 5px);
   text-align: center;
   color: #a99c86;
   display: flex;
@@ -330,9 +330,9 @@ main {
 }
 
 .postbox .slot-icon {
-  width: clamp(14px, 3vmin, 22px);
-  height: clamp(9px, 2vmin, 14px);
-  margin: 0 0 clamp(3px, 0.8vmin, 8px);
+  width: clamp(10px, 2.4vmin, 18px);
+  height: clamp(6px, 1.6vmin, 11px);
+  margin: 0 0 clamp(2px, 0.5vmin, 5px);
   border: 1px solid #7a6a4d;
   border-radius: 2px;
   position: relative;
@@ -349,7 +349,7 @@ main {
 
 .postbox .num {
   font-family: var(--serif-en);
-  font-size: clamp(9px, 1.6vmin, 13px);
+  font-size: clamp(7px, 1.3vmin, 11px);
   letter-spacing: 0.05em;
 }
 
@@ -369,20 +369,20 @@ main {
 
 .terminal {
   flex: 0 0 auto;
-  margin-top: clamp(6px, 1.4vmin, 18px);
+  margin-top: clamp(4px, 1vmin, 12px);
 }
 
 .terminal-box {
   background: var(--cream-card);
   border: 2px solid var(--ink);
   border-radius: 6px;
-  padding: clamp(10px, 2vmin, 22px) clamp(12px, 2.4vmin, 24px);
+  padding: clamp(6px, 1.4vmin, 16px) clamp(8px, 1.8vmin, 18px);
   font-family: var(--mono);
 }
 
 .terminal-box p {
   margin: 0 0 clamp(2px, 0.5vmin, 4px);
-  font-size: clamp(11px, 1.8vmin, 15px);
+  font-size: clamp(9px, 1.5vmin, 13px);
   min-height: 1.3em; /* タイプ中に高さが変わらないように */
 }
 
@@ -413,9 +413,9 @@ main {
   color: #e9e2d0;
   border: none;
   border-radius: 4px;
-  padding: clamp(8px, 1.6vmin, 12px) clamp(10px, 2vmin, 14px);
+  padding: clamp(5px, 1.2vmin, 10px) clamp(7px, 1.5vmin, 12px);
   font-family: inherit;
-  font-size: clamp(11px, 1.7vmin, 14px);
+  font-size: clamp(9px, 1.4vmin, 13px);
   letter-spacing: 0.02em;
 }
 .input-row input::placeholder { color: #8a8272; font-family: inherit; }
@@ -425,8 +425,8 @@ main {
   color: #e9e2d0;
   border: none;
   border-radius: 4px;
-  padding: 0 clamp(12px, 2.4vmin, 20px);
-  font-size: clamp(11px, 1.7vmin, 14px);
+  padding: 0 clamp(8px, 2vmin, 16px);
+  font-size: clamp(9px, 1.4vmin, 13px);
   font-family: inherit;
 }
 #boxSubmit { background: var(--cream-card); color: var(--ink); border: 1px solid var(--ink); }
@@ -435,16 +435,16 @@ main {
   background: none;
   border: none;
   color: var(--muted);
-  font-size: clamp(10px, 1.6vmin, 13px);
-  margin-top: clamp(8px, 1.4vmin, 14px);
+  font-size: clamp(8px, 1.3vmin, 11px);
+  margin-top: clamp(5px, 1vmin, 10px);
   padding: 0;
   font-family: inherit;
 }
 
 .error {
   color: #a3392a;
-  font-size: clamp(10px, 1.6vmin, 13px);
-  margin-top: clamp(6px, 1.2vmin, 10px);
+  font-size: clamp(8px, 1.3vmin, 11px);
+  margin-top: clamp(4px, 1vmin, 8px);
   font-family: inherit;
 }
 
